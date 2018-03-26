@@ -51,39 +51,3 @@
 
 (global-set-key (kbd "C-z h") #'ivy-hoogle)
 
-(defun lowercasep (c) (and (wordp c) (= c (downcase c))))
-(defun uppercasep (c) (and (wordp c) (= c (upcase c))))
-(defun whitespacep (c) (= 32 (char-syntax c)))
-
-(defun ivy-hoogle--parse-module ()
-  (parsec-collect-s
-   (parsec-satisfy #'uppercasep)
-   (parsec-many-till-s (parsec-any-ch)
-		       (parsec-try
-			(parsec-or (parsec-ch ?.)
-				   (parsec-ch ? )
-				   (parsec-eob))))))
-
-(defun ivy-hoogle--parse-module-path ()
-  (parsec-many (ivy-hoogle--parse-module)))
-
-(defun ivy-hoogle--parse-module-symbol ()
-  (parsec-collect
-   (ivy-hoogle--parse-module-path)
-   (parsec-many-till-s (parsec-any-ch)
-		       (parsec-or (parsec-ch ? )
-				  (parsec-eob)))))
-
-(defun ivy-hoogle--colour-module-path (mod-path)
-    (propertize (s-join "." mod-path) 'face 'haskell-liquid-haskell-annotation-face))
-
-(defvar teststr "Control.Lens.Getter view :: MonadReader s m => Getting a s a -> m a")
-
-(defun test ()
-  (interactive)
-  (let 
-      ((p (parsec-with-input teststr
-	    (ivy-hoogle--parse-module-symbol))))
-    (message "%s" (ivy-hoogle--colour-module-path (car p)))))
-
-(replace-regexp-in-string "\\([A-Z][a-z]*\\)" (propertize "\\1" 'font-lock-face 'haskell-type-face) "MonadReader s m => Getting a s a -> m a")
