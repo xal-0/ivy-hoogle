@@ -69,8 +69,8 @@
       (let ((ref (match-string 1)))
 	(replace-match (propertize ref 'face 'haskell-operator-face))))
     (goto-char (point-min))
-    (while (search-forward-regexp "\\(module\\|class\\|package\\|data\\|newtype\\|type\\)" nil 'noerror)
-      (let ((ref (match-string 1)))
+    (while (search-forward-regexp "\\(case\\|class\\|data\\|default\\|deriving\\|do\\|else\\|if\\|import\\|in\\|infix\\|infixl\\|infixr\\|instance\\|let\\|module\\|mdo\\|newtype\\|of\\|rec\\|pattern\\|proc\\|then\\|type\\|where\\|_\\|package\\)\\s-+" nil 'noerror)
+      (let ((ref (match-string 0)))
 	(replace-match (propertize ref 'face 'haskell-keyword-face))))
     (buffer-string)))
 
