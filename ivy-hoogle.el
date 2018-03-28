@@ -1,3 +1,30 @@
+;;; ivy-hoogle.el --- hoogle search for ivy
+
+;; Copyright (C) 2018 Sam Schweigel
+
+;; Author: Sam Schweigel <s.schweigel@gmail.com>
+;; Keywords: lisp
+;; Version: 0.0.1
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; Adds a syntax-coloured hoogle search through ivy.
+
+;;; Code:
+
 (require 'ivy)
 (require 's)
 
@@ -9,7 +36,7 @@
           (if (string-match "\\`\\([a-zA-Z_][a-zA-Z0-9_]*\\) " pattern)
               (match-string 1 pattern)
             pattern))
-         (lim 25)
+         (lim 100)
          (args (append (list "search" "-l")
                        (and lim (list "-n" (int-to-string lim)))
                        (list short-pattern))))
@@ -27,10 +54,24 @@
 
 (defun ivy-hoogle--fontify-haskell (src)
   (with-temp-buffer
+    (setq case-fold-search nil)
     (insert-string src)
-    (let ((delay-mode-hooks t))
-      (haskell-mode)
-      (font-lock-ensure))
+    (goto-char (point-min))
+    (when (search-forward-regexp "\\(\\(?:[A-Z]\\w*\.?\\)+\\)" nil 'noerror)
+      (replace-match (propertize (match-string 1) 'face 'haskell-type-face)))
+    (when (search-forward-regexp "\\(\\w*\\)" nil 'noerror)
+      (replace-match (propertize (match-string 1) 'face 'haskell-definition-face)))    
+    (while (search-forward-regexp "\\([A-Z]\\w*\\)" nil 'noerror)
+      (let ((ref (match-string 1)))
+	(replace-match (propertize ref 'face 'haskell-type-face))))
+    (goto-char (point-min))
+    (while (search-forward-regexp "\\([!#$%&*+./<=>?@\\^|-~:]\\)" nil 'noerror)
+      (let ((ref (match-string 1)))
+	(replace-match (propertize ref 'face 'haskell-operator-face))))
+    (goto-char (point-min))
+    (while (search-forward-regexp "\\(module\\|class\\|package\\|data\\|newtype\\|type\\)" nil 'noerror)
+      (let ((ref (match-string 1)))
+	(replace-match (propertize ref 'face 'haskell-keyword-face))))
     (buffer-string)))
 
 (defun ivy-hoogle--function (str)
@@ -51,3 +92,5 @@
 
 (global-set-key (kbd "C-z h") #'ivy-hoogle)
 
+(provide 'ivy-hoogle)
+;;; ivy-hoogle.el ends here
