@@ -90,7 +90,5 @@
 	    :action (lambda (str)
 		      (browse-url (get-text-property 0 'hoogle-url str)))))
 
-(global-set-key (kbd "C-z h") #'ivy-hoogle)
-
 (provide 'ivy-hoogle)
 ;;; ivy-hoogle.el ends here
