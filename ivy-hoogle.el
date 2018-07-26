@@ -55,7 +55,7 @@
 (defun ivy-hoogle--fontify-haskell (src)
   (with-temp-buffer
     (setq case-fold-search nil)
-    (insert-string src)
+    (insert src)
     (goto-char (point-min))
     (when (search-forward-regexp "\\(\\(?:[A-Z]\\w*\.?\\)+\\)" nil 'noerror)
       (replace-match (propertize (match-string 1) 'face 'haskell-type-face)))
