@@ -5,6 +5,7 @@
 ;; Author: Sam Schweigel <s.schweigel@gmail.com>
 ;; Keywords: lisp
 ;; Version: 0.0.1
+;; Package-Requires: ((ivy "0.10.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -79,6 +80,7 @@
 
 (defvar ivy-hoogle-history nil)
 
+;;;###autoload
 (defun ivy-hoogle ()
   (interactive)
   (ivy-read "Hoogle: "
