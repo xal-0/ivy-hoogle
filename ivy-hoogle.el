@@ -78,6 +78,7 @@
 
 ;;;###autoload
 (defun ivy-hoogle ()
+  "Perform a hoogle search."
   (interactive)
   (ivy-read "Hoogle: "
 	    #'ivy-hoogle--function
