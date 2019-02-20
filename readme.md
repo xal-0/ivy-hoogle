@@ -1,8 +1,12 @@
 # ivy-hoogle
 
-A really simple menu for search and navigating to hoogle entries.
+A really simple menu for searching and navigating to hoogle entries.
 Supports both identifier-based and type-directed searching, and syntax
 highlights results.
+
+## Demo
+
+![Live demo](https://user-images.githubusercontent.com/33556084/53057283-9bb13780-3463-11e9-8d06-c7337d34ed86.gif)
 
 ## Quick setup
 
@@ -12,7 +16,7 @@ Via `use-package-quelpa`:
 | --- | --- | --- |
 | `C-c h` | `ivy-hoogle` | Start a hoogle search. |
 
-```lisp
+```elisp
 (use-package ivy-hoogle
   :quelpa (ivy-hoogle
            :fetcher git
