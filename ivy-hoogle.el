@@ -33,14 +33,10 @@
   (let* ((pattern (or (and request-prefix
                            (concat request-prefix
                                    " "))))
-         (short-pattern
-          (if (string-match "\\`\\([a-zA-Z_][a-zA-Z0-9_]*\\) " pattern)
-              (match-string 1 pattern)
-            pattern))
          (lim 100)
          (args (append (list "search" "-l")
                        (and lim (list "-n" (int-to-string lim)))
-                       (list short-pattern))))
+                       (list pattern))))
     (let (candidates)
       (with-temp-buffer
         (apply #'call-process "hoogle" nil t nil args)
@@ -61,7 +57,7 @@
     (when (search-forward-regexp "\\(\\(?:[A-Z]\\w*\.?\\)+\\)" nil 'noerror)
       (replace-match (propertize (match-string 1) 'face 'haskell-type-face)))
     (when (search-forward-regexp "\\(\\w*\\)" nil 'noerror)
-      (replace-match (propertize (match-string 1) 'face 'haskell-definition-face)))    
+      (replace-match (propertize (match-string 1) 'face 'haskell-definition-face)))
     (while (search-forward-regexp "\\([A-Z]\\w*\\)" nil 'noerror)
       (let ((ref (match-string 1)))
 	(replace-match (propertize ref 'face 'haskell-type-face))))
