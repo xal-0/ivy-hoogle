@@ -84,7 +84,6 @@
 	    #'ivy-hoogle--function
 	    :dynamic-collection t
 	    :history ivy-hoogle-history
-	    :preselect (counsel-symbol-at-point)
 	    :re-builder #'regexp-quote
 	    :action (lambda (str)
 		      (browse-url (get-text-property 0 'hoogle-url str)))))
